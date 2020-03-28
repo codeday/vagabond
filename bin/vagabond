@@ -1,0 +1,7 @@
+#!/usr/bin/env node
+const spawn = require('cross-spawn');
+const { resolve, dirname } = require("path");
+
+// This is all a dumb way to disable the warning on the fs promises API from showing up
+const cmd = "node --no-warnings " + resolve(dirname(__dirname), "src");
+spawn.sync(cmd, process.argv.slice(2), { stdio: 'inherit', shell: true });
