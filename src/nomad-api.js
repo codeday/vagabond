@@ -26,7 +26,7 @@ module.exports.runJob = async (job, jobModifyIndex = null) => {
   }
 }
 
-module.exports.planJob = async(job) => {
+module.exports.planJob = async(job, short = false) => {
   try {
     const result = (await fetchNomad(`job/${job.ID}/plan`, 'POST', { Diff: true, Job: job }));
     const diff = drawDiff(result.Diff, 'Job') || 'No changes';
@@ -37,7 +37,8 @@ module.exports.planJob = async(job) => {
       +` the job modify index returned. If the index has changed, another user has modified the job and the plan's`
       +` results are potentially invalid.`;
 
-    return `${diff}\n\n${jobModifyText}`;
+    if (short) return diff;
+    else return `${diff}\n\n${jobModifyText}`;
   } catch (ex) {
     throw new Error(ex.message);
   }
