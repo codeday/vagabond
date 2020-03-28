@@ -2,6 +2,7 @@ const request = require('request-promise-native');
 const drawDiff = require('./draw-diff');
 
 const fetchNomad = async (path, method, json) => {
+  if (!process.env.NOMAD_ADDR) throw new Error('NOMAD_ADDR is not set.');
   try {
     return await request({
       url: `${process.env.NOMAD_ADDR}/v1/${path}`,
@@ -10,7 +11,7 @@ const fetchNomad = async (path, method, json) => {
     });
   } catch (ex) {
     if (ex.statusCode) throw ex;
-    else throw new Error(`Nomad is not available at ${process.env.NOMAD_ADDR}`);
+    else throw new Error(`Nomad is not available.`);
   }
 }
 
